@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Todo App</title>
+	<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+	<div class="body-container">
+		<div class="todo-wrapper">
+			<div class="todo-container">
+				<h2>Todo App</h2>
+				<div class="form-group">
+					<input type="text" class="todo-input" id="input-item">
+					<input type="hidden" id="save-index" value="">
+					<button class="add-btn" id="save-btn">Add </button>
+					<button class="add-btn none" id="update-btn">Save</button>
+				</div>
+				<div class="todo-items-wrapper" id="todo-items-wrapper">
+					
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+
+		showItems();
+
+		const input = document.getElementById('input-item');
+		const savebtn = document.getElementById('save-btn');
+		const update_btn = document.getElementById('update-btn');
+
+		input.onkeypress = function(event){
+
+			if(event.keyCode === 13){
+
+				si = document.getElementById('save-index').value;
+
+				if (si == "") {
+					savebtn.click();
+				}else{
+					update_btn.click();
+				}
+				
+			}
+		}
+
+		savebtn.onclick = function(){
+			inputval = input.value;
+			if (inputval) {
+				let todo_items = localStorage.getItem("items");
+				if(todo_items == null){
+					item_obj = []
+				}
+				else{
+					item_obj = JSON.parse(todo_items);
+				}
+				item_obj.push(inputval);
+				localStorage.setItem("items",JSON.stringify(item_obj));
+				input.value = "";
+
+				todo_items = localStorage.getItem("items");
+				items_array = JSON.parse(todo_items);
+				
+				showItems();
+			}
+
+		}
+
+		function showItems(){
+			todo_items = localStorage.getItem("items");
+			items_array = JSON.parse(todo_items);
+			// console.log(items_array);
+			htmlval ="";
+			item_wrpper = 
+			items_array.forEach((item, index) => {
+				// console.log(item);
+				htmlval += `
+					<div class="todo-items">
+						<div class="item-name">
+							<div class="sn">${index+1}</div>
+							<div> ${item}</div>
+						</div>
+						<div class="item-action">
+							<a href="#" class="btn btn-info" onclick=updateItem(${index}) ></a>
+							<a href="#" class="btn btn-danger" onclick=deleteItem(${index}) ></a>
+						</div>
+					</div>
+				`
+			});
+			document.getElementById('todo-items-wrapper').innerHTML = htmlval;
+		}
+
+		
+		add_btn = document.getElementById('save-btn');
+		const updateItem = (index) =>{
+			todo_items = localStorage.getItem("items");
+			items_array = JSON.parse(todo_items);
+
+			add_btn.style.display = "none"
+			update_btn.style.display = "block"
+
+			save_index = document.getElementById('save-index');
+ 			save_index.value = index;
+
+			input.value = items_array[index];
+			
+		}
+
+		document.getElementById('update-btn').onclick = function(){
+
+			add_btn.style.display = "block";
+			update_btn.style.display = "none";
+
+			inputval = input.value;
+			save_index = document.getElementById('save-index');
+ 	
+			todo_items = localStorage.getItem("items");
+			items_array = JSON.parse(todo_items);
+
+			items_array[save_index.value] = inputval;
+			
+			localStorage.setItem("items",JSON.stringify(items_array));			
+
+			input.value = "";
+
+			save_index.value = "";
+
+			showItems();
+
+		}
+
+		const deleteItem = (index) =>{
+			todo_items = localStorage.getItem("items");
+			items_array = JSON.parse(todo_items);
+
+			items_array.splice(index,1);
+
+			localStorage.setItem("items",JSON.stringify(items_array));	
+
+			showItems();
+
+		}
+
+	</script>
+</body>
+</html>
