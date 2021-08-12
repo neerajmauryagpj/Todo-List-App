@@ -78,7 +78,10 @@
 			else{
 				items_array = JSON.parse(todo_items);
 			}
-
+			
+			if(items_array.length == 0){
+				document.getElementById('todo-items-wrapper').innerHTML = "<h3>No Task</h3>";
+			}else{
 			// console.log(items_array);
 			htmlval ="";
 			item_wrpper = 
@@ -97,6 +100,7 @@
 				`
 			});
 			document.getElementById('todo-items-wrapper').innerHTML = htmlval;
+			}
 		}
 
 		
