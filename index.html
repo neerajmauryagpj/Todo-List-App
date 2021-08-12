@@ -70,13 +70,19 @@
 		}
 
 		function showItems(){
-			todo_items = localStorage.getItem("items");
-			items_array = JSON.parse(todo_items);
+
+			let todo_items = localStorage.getItem("items");
+			if(todo_items == null){
+				items_array = []
+			}
+			else{
+				items_array = JSON.parse(todo_items);
+			}
+
 			// console.log(items_array);
 			htmlval ="";
 			item_wrpper = 
-			items_array.forEach((item, index) => {
-				// console.log(item);
+			items_array.forEach(function(item, index){
 				htmlval += `
 					<div class="todo-items">
 						<div class="item-name">
